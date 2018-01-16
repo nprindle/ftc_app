@@ -16,11 +16,11 @@ public final class RobotUtils {
 
     // The access key required to interface with the Vuforia library
     private static final String VUFORIA_LICENSE_KEY =
-            "AbL7LFz/////AAAAGWhvpgZGq0UrltWm0ta5FBNn13kH1NYN6f/Juwmhj7v05WK+H9pdat5tgHe2" +
-                    "YWLnHgsOnSF3VmR2AEnCBHPQynT7y0b3q4QYXiMfXvewvs+BRq1sZrSS7epVa3rFvXvAM0En2hvZ" +
-                    "kO02NHc2nSW8QvF39gjE6xCOS74sNPCm3IaYzZb/zzlDXcDLi0nH1VUMjmxB+2Y4Pc/5OMjxpwbl" +
-                    "lJ5v7UkQtFHYGOT672J3G34PVQK2z6MFQrExJL78yIr7Z43z55Pey2R7FLe3k2ixVkvULI1mVVNk" +
-                    "fc0M+KVoMTgBGeSu9HH31QBjo5narwZB5kg+BJhPv2ToNzcFjNhOrRYdpolK5I/nprvQIB2fNyDM";
+        "AbL7LFz/////AAAAGWhvpgZGq0UrltWm0ta5FBNn13kH1NYN6f/Juwmhj7v05WK+H9pdat5tgHe2" +
+            "YWLnHgsOnSF3VmR2AEnCBHPQynT7y0b3q4QYXiMfXvewvs+BRq1sZrSS7epVa3rFvXvAM0En2hvZ" +
+            "kO02NHc2nSW8QvF39gjE6xCOS74sNPCm3IaYzZb/zzlDXcDLi0nH1VUMjmxB+2Y4Pc/5OMjxpwbl" +
+            "lJ5v7UkQtFHYGOT672J3G34PVQK2z6MFQrExJL78yIr7Z43z55Pey2R7FLe3k2ixVkvULI1mVVNk" +
+            "fc0M+KVoMTgBGeSu9HH31QBjo5narwZB5kg+BJhPv2ToNzcFjNhOrRYdpolK5I/nprvQIB2fNyDM";
 
     // Helper method to register a motor with the hardware map
     public static DcMotor registerMotor(HardwareMap map, String name,
