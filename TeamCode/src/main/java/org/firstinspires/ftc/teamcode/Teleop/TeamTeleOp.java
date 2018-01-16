@@ -17,11 +17,9 @@ public class TeamTeleOp extends OpMode {
     // Keeps track of time since beginning of execution
     private ElapsedTime runtime = new ElapsedTime();
 
-    // Wheels
+    // Wheel positions assume that the grabber is at the front
     // Lift controls the raising/lowering of the grabber arms in order to stack blocks
-    private DcMotor frontLeft, frontRight,
-            backLeft, backRight,
-            lift;
+    private DcMotor frontLeft, frontRight, backLeft, backRight, lift;
 
     // The arm used in autonomous for hitting the balls
     private DcMotor flicker;
