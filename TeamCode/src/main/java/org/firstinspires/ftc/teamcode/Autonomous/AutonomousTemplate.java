@@ -32,8 +32,8 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public ElapsedTime runtime = new ElapsedTime();
 
     // Fields used to interface with the Vuforia library to identify relics
-    private VuforiaLocalizer vuforia;
-    private VuforiaTrackable relicTemplate;
+    private VuforiaLocalizer            vuforia;
+    private VuforiaTrackable            relicTemplate;
     private ArrayList<VuforiaTrackable> trackables;
 
     // Fields relating to the built-in phone sensors
@@ -43,11 +43,11 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     float[] gravity;
     float[] geomagnetic;
     float[] rotationMatrix = new float[9];
-    float[] identity = new float[9];
-    float[] orientation = new float[3];
-    float azimuth = 0.0f;
-    float roll = 0.0f;
-    float pitch = 0.0f;
+    float[] identity       = new float[9];
+    float[] orientation    = new float[3];
+    float   azimuth        = 0.0f;
+    float   roll           = 0.0f;
+    float   pitch          = 0.0f;
 
     DcMotor frontLeft, frontRight, backLeft, backRight, lift, flicker;
     // Array used for block power changes to the wheels
@@ -68,7 +68,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     // Set to 1 and -1 so -1 * DIR will yield the opposite direction
     final static int
             RIGHT = 1,
-            LEFT = -1;
+            LEFT  = -1;
 
     // Units, all in terms of inches (should still use enumerations)
     // These are used for driving and strafing measurements
@@ -76,15 +76,15 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     final static double
             IN = 1.0,
             FT = 12.0,
-            M = 39.37,
+            M  = 39.37,
             CM = M / 100.0;
 
     // Fields to simplify identification of the relic
     final static RelicRecoveryVuMark
             VM_UNKNOWN = RelicRecoveryVuMark.UNKNOWN,
-            VM_LEFT = RelicRecoveryVuMark.LEFT,
-            VM_CENTER = RelicRecoveryVuMark.CENTER,
-            VM_RIGHT = RelicRecoveryVuMark.RIGHT;
+            VM_LEFT    = RelicRecoveryVuMark.LEFT,
+            VM_CENTER  = RelicRecoveryVuMark.CENTER,
+            VM_RIGHT   = RelicRecoveryVuMark.RIGHT;
 
     // The heart of VuMark identification.
     // In each autonomous, this Callable (like a genericized Runnable),
@@ -158,7 +158,9 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
 
         // Relic tracking initialization
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                                                        .getIdentifier("cameraMonitorViewId",
+                                                                "id", hardwareMap.appContext
+                                                                        .getPackageName());
         VuforiaLocalizer.Parameters parameters =
                 new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = RobotUtils.getVuforiaLicenseKey();

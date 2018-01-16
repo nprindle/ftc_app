@@ -21,9 +21,9 @@ public class AutonomousRed extends AutonomousTemplate {
         Future<RelicRecoveryVuMark> finder = executor.submit(vuMarkFinder);
 
         // Telemetry field to track current state of opmode
-        Telemetry.Item phase = telemetry.addData("Phase", "").setRetained(true);
+        Telemetry.Item phase     = telemetry.addData("Phase", "").setRetained(true);
         Telemetry.Item ballColor = telemetry.addData("Ball", "").setRetained(true);
-        Telemetry.Item markItem = telemetry.addData("VuMark", "").setRetained(true);
+        Telemetry.Item markItem  = telemetry.addData("VuMark", "").setRetained(true);
 
         grabLeft.setPosition(0.0);
         grabRight.setPosition(0.0);

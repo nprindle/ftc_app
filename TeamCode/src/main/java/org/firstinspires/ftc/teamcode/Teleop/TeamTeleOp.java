@@ -25,7 +25,7 @@ public class TeamTeleOp extends OpMode {
 
     // The arm used in autonomous for hitting the balls
     private DcMotor flicker;
-    private Servo flickerExt;
+    private Servo   flickerExt;
 
     // The four servos to extend the grabber
     private CRServo topRight, topLeft, bottomRight, bottomLeft;
@@ -33,7 +33,7 @@ public class TeamTeleOp extends OpMode {
     private Servo grabLeft, grabRight;
     // Variable used to cut the speed of the wheels
     // Also used to manage acceleration when driving
-    private double scale = 0;
+    private double scale       = 0;
     // Used to track the position of the block grabbing arms
     private double grabLeftPos = 0.0, grabRightPos = 0.0;
 

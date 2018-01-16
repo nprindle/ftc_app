@@ -14,10 +14,10 @@ public final class MathUtils {
 
     // Measurements used to calculate ticks from distance
     private static final double WHEEL_DIAMETER_IN_INCHES = 4.0;
-    private static final double WHEEL_BASE_IN_INCHES = 15.5;
-    private static final double TICKS_PER_INCH = TICKS /
+    private static final double WHEEL_BASE_IN_INCHES     = 15.5;
+    private static final double TICKS_PER_INCH           = TICKS /
             (WHEEL_DIAMETER_IN_INCHES * Math.PI);
-    private static final double TICKS_PER_DEGREE = (Math.PI *
+    private static final double TICKS_PER_DEGREE         = (Math.PI *
             WHEEL_BASE_IN_INCHES * TICKS_PER_INCH) / 360.0;
 
     /**
@@ -31,14 +31,14 @@ public final class MathUtils {
      */
     public static float[] calculateVelocities(float left_x, float left_y,
                                               float right_x, float right_y) {
-        double r = Math.hypot(left_x, left_y);
+        double r          = Math.hypot(left_x, left_y);
         double robotAngle = Math.atan2(left_y, left_x) - Math.PI / 4;
         return new float[]{
                 (float) (r * Math.cos(robotAngle) + right_x),
                 (float) (r * Math.sin(robotAngle) - right_x),
                 (float) (r * Math.sin(robotAngle) + right_x),
                 (float) (r * Math.cos(robotAngle) - right_x),
-        };
+                };
     }
 
     // The same method as above but used in an autonomous context
@@ -50,7 +50,7 @@ public final class MathUtils {
                 (float) (power * Math.sin(radians)),
                 (float) (power * Math.sin(radians)),
                 (float) (power * Math.cos(radians)),
-        };
+                };
     }
 
     // inchesPerUnit for some unit u should be equal to the ratio inches/unit
