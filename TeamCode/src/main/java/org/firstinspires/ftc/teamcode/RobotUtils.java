@@ -24,14 +24,14 @@ public final class RobotUtils {
 
     // Helper method to register a motor with the hardware map
     public static DcMotor registerMotor(HardwareMap map, String name,
-                                        boolean reversed, String runmode) {
+                                        boolean reversed, String mode) {
         DcMotor motor = map.dcMotor.get(name);
         if (reversed)
             motor.setDirection(DcMotor.Direction.REVERSE);
         else
             motor.setDirection(DcMotor.Direction.FORWARD);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        switch (runmode.toLowerCase()) {
+        switch (mode.toLowerCase()) {
             case "position":
                 motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 break;
@@ -47,14 +47,12 @@ public final class RobotUtils {
 
     // More specific helper method to register motor without
     // worrying about the default RunMode
-    public static DcMotor registerMotor(HardwareMap map, String name,
-                                        boolean reversed) {
+    public static DcMotor registerMotor(HardwareMap map, String name, boolean reversed) {
         return registerMotor(map, name, reversed, "default");
     }
 
     // Helper method to register a servo with the hardware map
-    public static Servo registerServo(HardwareMap map, String name,
-                                      boolean reversed) {
+    public static Servo registerServo(HardwareMap map, String name, boolean reversed) {
         Servo servo = map.servo.get(name);
         if (reversed)
             servo.setDirection(Servo.Direction.REVERSE);
@@ -90,8 +88,7 @@ public final class RobotUtils {
 
     // Helper method to register a continuous rotation servo
     // without providing a default speed during initialization
-    public static CRServo registerCRServo(HardwareMap map, String name,
-                                          boolean reversed) {
+    public static CRServo registerCRServo(HardwareMap map, String name, boolean reversed) {
         CRServo crServo = map.crservo.get(name);
         if (reversed)
             crServo.setDirection(CRServo.Direction.REVERSE);
@@ -108,8 +105,7 @@ public final class RobotUtils {
     // Method to retrieve the sensor manager from the app context for use in
     // utilizing the built-in sensors in the phone
     public static SensorManager getSensorManager(HardwareMap map) {
-        return (SensorManager)
-                map.appContext.getSystemService(Context.SENSOR_SERVICE);
+        return (SensorManager) map.appContext.getSystemService(Context.SENSOR_SERVICE);
     }
 
 }
