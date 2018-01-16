@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+public final class MathUtils {
 
-public class MathUtils {
+    private MathUtils() {
+
+    }
 
     // Ticks in a full revolution according to motor specifications
     // AndyMark NeveRest Classic 40 Gearmotor
@@ -14,16 +16,16 @@ public class MathUtils {
     private static final double WHEEL_DIAMETER_IN_INCHES = 4.0;
     private static final double WHEEL_BASE_IN_INCHES = 15.5;
     private static final double TICKS_PER_INCH = TICKS /
-        (WHEEL_DIAMETER_IN_INCHES * Math.PI);
+            (WHEEL_DIAMETER_IN_INCHES * Math.PI);
     private static final double TICKS_PER_DEGREE = (Math.PI *
             WHEEL_BASE_IN_INCHES * TICKS_PER_INCH) / 360.0;
 
     /**
      * Index to motor associations:
-     *
+     * <p>
      * 0     1      2         3
      * frontLeft, frontRight, backLeft, backRight
-     * 
+     * <p>
      * Uses the positions of the joysticks to determine the relative velocities
      * to move each of the wheels in order to strafe
      */
@@ -31,11 +33,11 @@ public class MathUtils {
                                               float right_x, float right_y) {
         double r = Math.hypot(left_x, left_y);
         double robotAngle = Math.atan2(left_y, left_x) - Math.PI / 4;
-        return new float[] {
-            (float) (r * Math.cos(robotAngle) + right_x),
-            (float) (r * Math.sin(robotAngle) - right_x),
-            (float) (r * Math.sin(robotAngle) + right_x),
-            (float) (r * Math.cos(robotAngle) - right_x),
+        return new float[]{
+                (float) (r * Math.cos(robotAngle) + right_x),
+                (float) (r * Math.sin(robotAngle) - right_x),
+                (float) (r * Math.sin(robotAngle) + right_x),
+                (float) (r * Math.cos(robotAngle) - right_x),
         };
     }
 
@@ -43,11 +45,11 @@ public class MathUtils {
     // i.e. no controller input necessary
     public static float[] calculateVelocities(double power, double degrees) {
         double radians = Math.toRadians(degrees) - Math.PI / 4;
-        return new float[] {
-            (float) (power * Math.cos(radians)),
-            (float) (power * Math.sin(radians)),
-            (float) (power * Math.sin(radians)),
-            (float) (power * Math.cos(radians)),
+        return new float[]{
+                (float) (power * Math.cos(radians)),
+                (float) (power * Math.sin(radians)),
+                (float) (power * Math.sin(radians)),
+                (float) (power * Math.cos(radians)),
         };
     }
 
@@ -76,13 +78,13 @@ public class MathUtils {
     public static double constrainServo(double val) {
         return constrain(0.0, 1.0, val);
     }
-    
+
     // Generic helper method to determine whether or not a value is within
     // a certain range of some truth value
     // Originally used in turning based on gyroscope headings, as the turn
     // could overshoot the target heading
     public static boolean within(float value, float truth, float error) {
-        return Math.abs(value - truth) <= error; 
+        return Math.abs(value - truth) <= error;
     }
 
 }

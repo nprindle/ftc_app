@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import org.firstinspires.ftc.teamcode.MathUtils;
 
 @Autonomous(name = "Spontonomous", group = "Team Autonomous")
 public class Spontonomous extends AutonomousTemplate {
@@ -17,7 +15,7 @@ public class Spontonomous extends AutonomousTemplate {
         delay(0.5);
         lift.setPower(0.0);
         delay(2);
-        
+
         runMotors(0.2, 0.5, flicker);
         flickerExt.setPosition(0.0);
         delay();
@@ -40,11 +38,13 @@ public class Spontonomous extends AutonomousTemplate {
             }
         }
         colorSensor.enableLed(false);
-        
+
         strafe(2.5, FT, 0, 0.7);
         drive(-6, IN, 0.3);
 
-        while(runtime.seconds() < 30 && !isStopRequested());
+        while (runtime.seconds() < 30 && !isStopRequested()) {
+            sleep(10);
+        }
     }
-    
+
 }

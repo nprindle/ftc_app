@@ -1,18 +1,14 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import java.util.concurrent.Callable;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
-import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTemplate;
-import org.firstinspires.ftc.teamcode.MathUtils;
 
 @Autonomous(name = "Auto Blue", group = "Autonomous")
 public class AutonomousBlue extends AutonomousTemplate {
@@ -35,11 +31,11 @@ public class AutonomousBlue extends AutonomousTemplate {
         delay(0.5);
         lift.setPower(0.0);
         delay(2);
-        
+
         delay();
         // Labeled block to delimit subtask
         // Also allows for named block collapsing in OnBot
-        colorBall: {
+        {
             phase.setValue("Color Ball");
             telemetry.update();
             encoderDrive();
@@ -83,9 +79,9 @@ public class AutonomousBlue extends AutonomousTemplate {
                     // notify driver that no color can be successfully identified,
                     // possibly signaling an error with the color sensor
                     ballColor.setValue(String.format("unknown %d %d %d",
-                        colorSensor.red(),
-                        colorSensor.blue(),
-                        colorSensor.green()));
+                            colorSensor.red(),
+                            colorSensor.blue(),
+                            colorSensor.green()));
                     telemetry.update();
                 }
             }
@@ -97,7 +93,7 @@ public class AutonomousBlue extends AutonomousTemplate {
         telemetry.clear();
         delay();
         RelicRecoveryVuMark mark;
-        searchVuMark: {
+        {
             phase.setValue("Search VuMark");
             telemetry.update();
             encoderDrive();
@@ -127,13 +123,13 @@ public class AutonomousBlue extends AutonomousTemplate {
         }
 
         delay();
-        placeBlock: {
+        {
             phase.setValue("Place Block");
             telemetry.update();
             encoderDrive();
             if (mark.equals(VM_RIGHT))
                 strafe(18.5, IN, 180, 1.0);
-            else if (mark.equals(mark.equals(VM_CENTER)))
+            else if (mark.equals(VM_CENTER))
                 strafe(26, IN, 180, 1.0);
             else if (mark.equals(VM_LEFT))
                 strafe(33.5, IN, 180, 1.0);
@@ -147,7 +143,7 @@ public class AutonomousBlue extends AutonomousTemplate {
         phase.setValue("Waiting for stop");
         stopMotors(wheels);
         resetEncoders();
-        while(runtime.seconds() < 30.0 && !isStopRequested())
+        while (runtime.seconds() < 30.0 && !isStopRequested())
             sleep(10);
     }
 }

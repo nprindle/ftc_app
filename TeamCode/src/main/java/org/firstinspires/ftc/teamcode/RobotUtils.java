@@ -2,15 +2,20 @@ package org.firstinspires.ftc.teamcode;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-public class RobotUtils {
+public final class RobotUtils {
+
+    private RobotUtils() {
+
+    }
 
     // The access key required to interface with the Vuforia library
-    private static final String vuforiaLicenseKey =
+    private static final String VUFORIA_LICENSE_KEY =
             "AbL7LFz/////AAAAGWhvpgZGq0UrltWm0ta5FBNn13kH1NYN6f/Juwmhj7v05WK+H9pdat5tgHe2" +
                     "YWLnHgsOnSF3VmR2AEnCBHPQynT7y0b3q4QYXiMfXvewvs+BRq1sZrSS7epVa3rFvXvAM0En2hvZ" +
                     "kO02NHc2nSW8QvF39gjE6xCOS74sNPCm3IaYzZb/zzlDXcDLi0nH1VUMjmxB+2Y4Pc/5OMjxpwbl" +
@@ -97,14 +102,14 @@ public class RobotUtils {
 
     // Accessor method for the license key defined above
     public static String getVuforiaLicenseKey() {
-        return vuforiaLicenseKey;
+        return VUFORIA_LICENSE_KEY;
     }
-    
+
     // Method to retrieve the sensor manager from the app context for use in
     // utilizing the built-in sensors in the phone
     public static SensorManager getSensorManager(HardwareMap map) {
         return (SensorManager)
-            map.appContext.getSystemService(Context.SENSOR_SERVICE);
+                map.appContext.getSystemService(Context.SENSOR_SERVICE);
     }
 
 }
