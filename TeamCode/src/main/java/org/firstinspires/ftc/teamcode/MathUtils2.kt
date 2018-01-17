@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode
 
-@Suppress("unused")
+@Suppress("unused", "CanBePrivate")
 object MathUtils2 {
 
     // Ticks in a full revolution according to motor specifications
