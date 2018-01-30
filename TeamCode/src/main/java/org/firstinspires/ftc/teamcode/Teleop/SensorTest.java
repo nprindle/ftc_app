@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 
 @TeleOp(name = "GyroSensor", group = "TeleOp")
-
 public class SensorTest extends OpMode {
     Gyroscope              gyroscope;
     HiTechnicNxtGyroSensor hiTechnicNxtGyroSensor;
@@ -49,13 +48,13 @@ public class SensorTest extends OpMode {
         double          current  = System.nanoTime();
         AngularVelocity velocity = hiTechnicNxtGyroSensor.getAngularVelocity(AngleUnit.DEGREES);
         int             adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity
-                .zRotationRate;
+            .zRotationRate;
         degrees += ((velocity.acquisitionTime - current) * velocity.zRotationRate / 1000000000);
         telemetry.addData("rate", "%.4f deg/s", adjVeloc);
         telemetry.addData("deg", "%.4f deg", degrees * 180);
-        if ((Math.abs(degrees * 180)) > 89 && (Math.abs(degrees * 180)) < 91) {
+        if ((Math.abs(degrees * 180)) > 89 && (Math.abs(degrees * 180)) < 91)
             telemetry.addData("IN THE IF", degrees * 180);
-        }
+
         telemetry.update();
 
     }
