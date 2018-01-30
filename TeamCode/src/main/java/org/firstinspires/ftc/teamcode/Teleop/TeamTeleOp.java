@@ -99,15 +99,16 @@ public class TeamTeleOp extends OpMode {
 
         telemetry.addData("Flicker Pos in the loop", flicker.getPosition());
 
-        // LOOK AT THIS FOR VIKAS REQUEST
-        // if(gamepad2.x)
-        // {
-        //     firstFlip.setPower(0.8);
-        //     firstFlip.setPower(0.0);
-        //     grabLeft.setPosition(1.0);
-        //     grabRight.setPosition(1.0);
-        //     firstFlip.setPower(-0.8);
-        // }
+        if (gamepad2.x) {
+            firstFlip.setPower(0.8);
+            delay(0.5);
+            firstFlip.setPower(0.0);
+            grabLeft.setPosition(1.0);
+            grabRight.setPosition(1.0);
+            firstFlip.setPower(-0.8);
+            delay(0.3);
+            firstFlip.setPower(0.0);
+        }
 
         // 'a' and 'b' of gamepad 2 open and close the block grabbers
         if (gamepad2.a) {
@@ -150,6 +151,7 @@ public class TeamTeleOp extends OpMode {
         frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "default");
         backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "default");
         backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
+
         firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "default");
 
         leftFly = RobotUtils.registerCRServo(hardwareMap, "leftFly", true, 0.0);
@@ -168,23 +170,22 @@ public class TeamTeleOp extends OpMode {
     }
 
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+    }
 
     // simply ensures motors are stopped when start is pressed
     @Override
     public void start() {
         powerMotors(0, frontLeft, frontRight, backLeft, backRight);
-        // secondFlip.setPosition(0.0);
-        //    grabLeft.setPosition(0.5);
-        // grabRight.setPosition(0.5);
         runtime.reset();
     }
 
-
-    //  public void delay(double seconds) {
-    //  //   sleep((long) (1000.0 * seconds));
-    //  idle();
-    // }
+    public void delay(double seconds) {
+        try {
+            Thread.sleep((long) (1000.0 * seconds));
+        } catch (InterruptedException e) {
+        }
+    }
 
     // ensures that motors are halted when telemetry ends
     // otherwise, would run continually for several seconds
