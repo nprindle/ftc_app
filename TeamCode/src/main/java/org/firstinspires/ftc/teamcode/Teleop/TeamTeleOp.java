@@ -19,11 +19,8 @@ public class TeamTeleOp extends OpMode {
     // Wheels
     private DcMotor frontLeft, frontRight,
             backLeft, backRight, firstFlip;
-    // Lift controls the raising/lowering of the grabber arms in order to stack blocks
-
 
     // The arm used in autonomous for hitting the balls
-    //private DcMotor flicker;
     private Servo flicker, secondFlip;
 
     // The four servos to extend the grabber
@@ -100,7 +97,6 @@ public class TeamTeleOp extends OpMode {
             rightFly.setPower(0.0);
         }
 
-        // flicker.setPosition(flickerPos);
         telemetry.addData("Flicker Pos in the loop", flicker.getPosition());
 
         // LOOK AT THIS FOR VIKAS REQUEST
@@ -156,16 +152,12 @@ public class TeamTeleOp extends OpMode {
         backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
         firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "default");
 
-        //lift = RobotUtils.registerMotor(hardwareMap, "lift", true, "default");
-
         leftFly = RobotUtils.registerCRServo(hardwareMap, "leftFly", true, 0.0);
         rightFly = RobotUtils.registerCRServo(hardwareMap, "rightFly", false, 0.0);
-        // bottomRight = RobotUtils.registerCRServo(hardwareMap, "bottomRight", false);
 
         grabLeft = RobotUtils.registerServo(hardwareMap, "grabLeft", true, grabLeftPos);
         grabRight = RobotUtils.registerServo(hardwareMap, "grabRight", false, grabRightPos);
 
-        //flicker = RobotUtils.registerMotor(hardwareMap, "flicker", true, "default");
         flicker = RobotUtils.registerServo(hardwareMap, "flicker", false, flickerPos);
         secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", false, secondFlipPos);
 
