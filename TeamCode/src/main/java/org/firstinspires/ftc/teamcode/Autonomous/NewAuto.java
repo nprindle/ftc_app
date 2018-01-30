@@ -14,8 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTemplate;
 import org.firstinspires.ftc.teamcode.MathUtils;
 
-@Autonomous(name = "Auto Blue", group = "Autonomous")
-public class AutonomousBlue extends AutonomousTemplate {
+@Autonomous(name = "Auto Blue 2", group = "Autonomous")
+public class NewAuto extends AutonomousTemplate {
 
     @Override
     public void auto() {
