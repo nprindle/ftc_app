@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
+
 import org.firstinspires.ftc.teamcode.MathUtils;
 import org.firstinspires.ftc.teamcode.RobotUtils;
 
 // Phases: init, init_loop, start, loop, stop
+@Disabled
 @TeleOp(name = "8573 TeleOp", group = "TeleOp")
 public class TeamTeleOp extends OpMode {
 
@@ -20,13 +21,13 @@ public class TeamTeleOp extends OpMode {
 
     // Wheels
     private DcMotor frontLeft, frontRight,
-                    backLeft, backRight,
+            backLeft, backRight,
     // Lift controls the raising/lowering of the grabber arms in order to stack blocks
-                    lift;
+    lift;
 
     // The arm used in autonomous for hitting the balls
     private DcMotor flicker;
-    private Servo flickerExt;
+    private Servo   flickerExt;
 
     // The four servos to extend the grabber
     private CRServo topRight, topLeft, bottomRight, bottomLeft;
@@ -34,7 +35,7 @@ public class TeamTeleOp extends OpMode {
     private Servo grabLeft, grabRight;
     // Variable used to cut the speed of the wheels
     // Also used to manage acceleration when driving
-    private double scale = 0;
+    private double scale       = 0;
     // Used to track the position of the block grabbing arms
     private double grabLeftPos = 0.0, grabRightPos = 0.0;
 
@@ -58,10 +59,10 @@ public class TeamTeleOp extends OpMode {
             scale = 0.25;
         } else if (gamepad1.right_trigger > 0.1) {
             scale = 1.0;
-        } else if(gamepad1.right_bumper) {
-            if(gamepad1.x)
+        } else if (gamepad1.right_bumper) {
+            if (gamepad1.x)
                 scale = 0;
-            else if(scale < Math.hypot(left_x, left_y))
+            else if (scale < Math.hypot(left_x, left_y))
                 scale += 0.05;
         } else {
             scale = 0.5;
@@ -105,13 +106,13 @@ public class TeamTeleOp extends OpMode {
         }
         grabLeft.setPosition(grabLeftPos);
         grabRight.setPosition(grabRightPos);
-        
+
         // The triggers of gamepad 2 will control the lift speed, with
         // the right trigger raising it and the left lowering it
-        if(gamepad2.right_trigger > 0.1 || gamepad2.left_trigger > 0.1) {
+        if (gamepad2.right_trigger > 0.1 || gamepad2.left_trigger > 0.1) {
             lift.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
         } else {
-           lift.setPower(0);
+            lift.setPower(0);
         }
 
         // The flicker occasionally falls because it's a DC motor, so
@@ -161,9 +162,10 @@ public class TeamTeleOp extends OpMode {
         telemetry.addData("Status", "Initialization complete");
         telemetry.update();
     }
-    
+
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+    }
 
     // simply ensures motors are stopped when start is pressed
     @Override

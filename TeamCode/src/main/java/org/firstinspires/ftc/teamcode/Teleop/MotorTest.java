@@ -1,31 +1,30 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.robot.Robot;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import org.firstinspires.ftc.robotcore.external.navigation.Position;
+
 import org.firstinspires.ftc.teamcode.MathUtils;
 import org.firstinspires.ftc.teamcode.RobotUtils;
+
 @TeleOp(name = "Motor Test", group = "TeleOp")
 
-public class MotorTest extends OpMode{
-// Keeps track of time since beginning of execution
+public class MotorTest extends OpMode {
+    // Keeps track of time since beginning of execution
     private ElapsedTime runtime = new ElapsedTime();
 
     // Wheels
-  //  private DcMotor frontLeft, frontRight,
-                   // backLeft, backRight;
+    //  private DcMotor frontLeft, frontRight,
+    // backLeft, backRight;
     // Lift controls the raising/lowering of the grabber arms in order to stack blocks
-                
+
 
     // The arm used in autonomous for hitting the balls
-//    private DcMotor flicker;
-    //private Servo flickerExt;
+    // private DcMotor flicker;
+    // private Servo flickerExt;
 
     // The four servos to extend the grabber
     private CRServo leftFly, rightFly, pancake;
@@ -33,7 +32,7 @@ public class MotorTest extends OpMode{
     private Servo grabLeft, grabRight;
     // Variable used to cut the speed of the wheels
     // Also used to manage acceleration when driving
-    private double scale = 0;
+    private double scale       = 0;
     // Used to track the position of the block grabbing arms
     private double grabLeftPos = 1.0, grabRightPos = 1.0;
 
@@ -72,24 +71,20 @@ public class MotorTest extends OpMode{
         // frontRight.setPower(vs[1] * scale);
         // backLeft.setPower(vs[2] * scale);
         // backRight.setPower(vs[3] * scale);
-        
-        if(Math.abs(left_y_2)>0.1)
-        {
+
+        if (Math.abs(left_y_2) > 0.1) {
             leftFly.setPower(left_y_2);
-        }
-        else{
+        } else {
             leftFly.setPower(0.0);
         }
-        
-        if(Math.abs(right_y_2)>0.1)
-        {
+
+        if (Math.abs(right_y_2) > 0.1) {
             rightFly.setPower(right_y_2);
-        }
-        else{
+        } else {
             rightFly.setPower(0.0);
         }
-        
-        
+
+
         // Use the right joystick on gamepad 2 to control the upper lift
         // if (Math.abs(right_y_2) > 0.1) {
         //     topRight.setPower(right_y_2);
@@ -121,17 +116,15 @@ public class MotorTest extends OpMode{
         }
         grabLeft.setPosition(grabLeftPos);
         grabRight.setPosition(grabRightPos);
-        
-        if(gamepad2.x) {
+
+        if (gamepad2.x) {
             pancake.setPower(1.0);
-        }
-        else if(gamepad2.y) {
+        } else if (gamepad2.y) {
             pancake.setPower(-1.0);
-        }
-        else {
+        } else {
             pancake.setPower(0.0);
         }
-        
+
         // The triggers of gamepad 2 will control the lift speed, with
         // the right trigger raising it and the left lowering it
         // if(gamepad2.right_trigger > 0.1 || gamepad2.left_trigger > 0.1) {
@@ -142,7 +135,7 @@ public class MotorTest extends OpMode{
 
         // The flicker occasionally falls because it's a DC motor, so
         // gamepad 1 can lift it back up if necessary
-      //  flicker.setPower(gamepad1.a ? 0.3 : gamepad1.b ? -0.3 : 0.0);
+        //  flicker.setPower(gamepad1.a ? 0.3 : gamepad1.b ? -0.3 : 0.0);
 
         // Telemetry data to be shown every cycle
         // Float formatting used in an attempt to align the numbers in the
@@ -171,14 +164,13 @@ public class MotorTest extends OpMode{
         // frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "default");
         // backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "default");
         // backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
-        
-        
-        
+
+
         //lift = RobotUtils.registerMotor(hardwareMap, "lift", true, "default");
 
-         leftFly = RobotUtils.registerCRServo(hardwareMap, "leftFly", true);
-         rightFly = RobotUtils.registerCRServo(hardwareMap, "rightFly", false);
-         pancake = RobotUtils.registerCRServo(hardwareMap, "pancake", true);
+        leftFly = RobotUtils.registerCRServo(hardwareMap, "leftFly", true);
+        rightFly = RobotUtils.registerCRServo(hardwareMap, "rightFly", false);
+        pancake = RobotUtils.registerCRServo(hardwareMap, "pancake", true);
         // bottomRight = RobotUtils.registerCRServo(hardwareMap, "bottomRight", false);
 
         grabLeft = RobotUtils.registerServo(hardwareMap, "grabLeft", true, grabLeftPos);
@@ -190,9 +182,10 @@ public class MotorTest extends OpMode{
         telemetry.addData("Status", "Initialization complete");
         telemetry.update();
     }
-    
+
     @Override
-    public void init_loop() {}
+    public void init_loop() {
+    }
 
     // simply ensures motors are stopped when start is pressed
     @Override
