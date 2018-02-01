@@ -1,34 +1,31 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.hardware.Sensor;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.OrientationSensor;
+import com.qualcomm.robotcore.hardware.Gyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.concurrent.Callable;
+
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.Acceleration;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.MathUtils;
 import org.firstinspires.ftc.teamcode.RobotUtils;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
-import com.qualcomm.robotcore.hardware.Gyroscope;
+
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
 
 
 // This class is extended by all autonomous subprograms run by the team
@@ -40,8 +37,8 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public ElapsedTime runtime = new ElapsedTime();
 
     // Fields used to interface with the Vuforia library to identify relics
-    private VuforiaLocalizer vuforia;
-    private VuforiaTrackable relicTemplate;
+    private VuforiaLocalizer            vuforia;
+    private VuforiaTrackable            relicTemplate;
     private ArrayList<VuforiaTrackable> trackables;
 
     // Fields relating to the built-in phone sensors
@@ -51,17 +48,17 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     float[] gravity;
     float[] geomagnetic;
     float[] rotationMatrix = new float[9];
-    float[] identity = new float[9];
-    float[] orientation = new float[3];
-    float azimuth = 0.0f;
-    float roll = 0.0f;
-    float pitch = 0.0f;
-    
-    Gyroscope gyroscope;
-     HiTechnicNxtGyroSensor hiTechnicNxtGyroSensor;
-     double degrees = 0.0;
+    float[] identity       = new float[9];
+    float[] orientation    = new float[3];
+    float   azimuth        = 0.0f;
+    float   roll           = 0.0f;
+    float   pitch          = 0.0f;
 
-    DcMotor frontLeft, frontRight, backLeft, backRight, lift, flicker;
+     Gyroscope              gyroscope;
+     HiTechnicNxtGyroSensor hiTechnicNxtGyroSensor;
+    double degrees = 0.0;
+
+    DcMotor frontLeft, frontRight, backLeft, backRight, firstFlip;
     // Array used for block power changes to the wheels
     DcMotor[] wheels;
 
@@ -69,9 +66,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     CRServo topRight, topLeft, bottomRight, bottomLeft;
 
     // The arms of the block grabber
-    Servo grabLeft, grabRight;
-    // The servo at the end of the arm used for hitting the balls
-    Servo flickerExt;
+    Servo grabLeft, grabRight, flicker, secondFlip;
 
     ColorSensor colorSensor;
 
@@ -80,7 +75,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     // Set to 1 and -1 so -1 * DIR will yield the opposite direction
     final static int
             RIGHT = 1,
-            LEFT = -1;
+            LEFT  = -1;
 
     // Units, all in terms of inches (should still use enumerations)
     // These are used for driving and strafing measurements
@@ -88,16 +83,16 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     final static double
             IN = 1.0,
             FT = 12.0,
-            M = 39.37,
+            M  = 39.37,
             CM = M / 100.0;
 
     // Fields to simplify identification of the relic
     final static RelicRecoveryVuMark
             VM_UNKNOWN = RelicRecoveryVuMark.UNKNOWN,
-            VM_LEFT = RelicRecoveryVuMark.LEFT,
-            VM_CENTER = RelicRecoveryVuMark.CENTER,
-            VM_RIGHT = RelicRecoveryVuMark.RIGHT;
-    
+            VM_LEFT    = RelicRecoveryVuMark.LEFT,
+            VM_CENTER  = RelicRecoveryVuMark.CENTER,
+            VM_RIGHT   = RelicRecoveryVuMark.RIGHT;
+
     // The heart of VuMark identification.
     // In each autonomous, this Callable (like a genericized Runnable),
     // is submitted to an ExecutorService. This allows the robot to search
@@ -106,17 +101,17 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     // a decision based off of it. This is done by using the Future returned
     // by ExecutorService.submit()
     final Callable<RelicRecoveryVuMark> vuMarkFinder = new
-        Callable<RelicRecoveryVuMark>() {
-        @Override
-        public RelicRecoveryVuMark call() {
-            // Continually search for a mark until one is recognized
-            RelicRecoveryVuMark mark;
-            do
-                mark = getVuMark();
-            while(mark.equals(VM_UNKNOWN));
-            return mark;
-        }
-    };
+            Callable<RelicRecoveryVuMark>() {
+                @Override
+                public RelicRecoveryVuMark call() {
+                    // Continually search for a mark until one is recognized
+                    RelicRecoveryVuMark mark;
+                    do
+                        mark = getVuMark();
+                    while (mark.equals(VM_UNKNOWN));
+                    return mark;
+                }
+            };
 
     @Override
     public void runOpMode() {
@@ -126,7 +121,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
 
         // Phone sensor registration
         mSensorManager = RobotUtils.getSensorManager(hardwareMap);
-       
+
         // if (mAccelerometer != null) {
         //     mSensorManager.registerListener(this, mAccelerometer,
         //         SensorManager.SENSOR_DELAY_NORMAL);
@@ -144,42 +139,40 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
 
         // Initialization phase
         // If Tetrix, should be opposite (false, true, false, true)
-        frontLeft = RobotUtils.registerMotor(hardwareMap, "left", true, "position");
-        frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "position");
-        backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "position");
-        backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "position");
+        frontLeft = RobotUtils.registerMotor(hardwareMap, "left", true, "default");
+        frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "default");
+        backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "default");
+        backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
+        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "default");
 
-        lift = RobotUtils.registerMotor(hardwareMap, "lift", true, "default");
-        flicker = RobotUtils.registerMotor(hardwareMap, "flicker", true, "default");
+        grabLeft = RobotUtils.registerServo(hardwareMap, "grabLeft", true, 0.549);
+        grabRight = RobotUtils.registerServo(hardwareMap, "grabRight", false, 0.549);
 
-        topLeft = RobotUtils.registerCRServo(hardwareMap, "topLeft", false);
-        topRight = RobotUtils.registerCRServo(hardwareMap, "topRight", true);
-        bottomLeft = RobotUtils.registerCRServo(hardwareMap, "bottomLeft", false);
-        bottomRight = RobotUtils.registerCRServo(hardwareMap, "bottomRight", true);
-
-        grabLeft = RobotUtils.registerServo(hardwareMap, "grabLeft", true);
-        grabRight = RobotUtils.registerServo(hardwareMap, "grabRight", false);
-        flickerExt = RobotUtils.registerServo(hardwareMap, "flickerExt", true);
+        //flicker = RobotUtils.registerMotor(hardwareMap, "flicker", true, "default");
+        flicker = RobotUtils.registerServo(hardwareMap, "flicker", false, 0.4);
+        secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", false, 0.0);
 
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
 
         wheels = new DcMotor[]{frontLeft, frontRight, backLeft, backRight};
-         gyroscope = hardwareMap.get(Gyroscope.class, "gyro");
-         hiTechnicNxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
+        // gyroscope = hardwareMap.get(Gyroscope.class, "gyro");
+        // hiTechnicNxtGyroSensor = hardwareMap.get(HiTechnicNxtGyroSensor.class, "gyro");
 
         telemetry.addData("Status", "initialized");
         telemetry.update();
 
         // Relic tracking initialization
         int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                .getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+                                                        .getIdentifier("cameraMonitorViewId",
+                                                                "id", hardwareMap.appContext
+                                                                        .getPackageName());
         VuforiaLocalizer.Parameters parameters =
-            new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+                new VuforiaLocalizer.Parameters(cameraMonitorViewId);
         parameters.vuforiaLicenseKey = RobotUtils.getVuforiaLicenseKey();
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
         VuforiaTrackables relicTrackers =
-            this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        trackables = new ArrayList<VuforiaTrackable>();
+                this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        trackables = new ArrayList<>();
         trackables.addAll(relicTrackers);
         relicTemplate = relicTrackers.get(0);
         relicTemplate.setName("relicTemplate");
@@ -196,7 +189,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         auto();
 
         // Ensure that all motors are halted after autonomous execution
-        stopMotors(frontLeft, frontRight, backLeft, backRight, lift);
+        stopMotors(frontLeft, frontRight, backLeft, backRight);
     }
 
     // Each autonomous subprogram will define an auto() method that contains
@@ -205,7 +198,8 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
 
     // Used for phone sensor readings
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
 
     // Used for phone sensor updates
     @Override
@@ -230,7 +224,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public void delay(double seconds) {
         sleep((long) (1000.0 * seconds));
     }
-    
+
     // Generic waiting, usually for a full hardware cycle
     public void delay() {
         idle();
@@ -302,32 +296,31 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
 
             powerMotors(factor * power, frontLeft, backLeft);
             powerMotors(-factor * power, frontRight, backRight);
-            while (allWheelsBusy() && !isStopRequested())                 
+            while (allWheelsBusy() && !isStopRequested())
                 sleep(10);
 
             stopMotors(wheels);
         }
     }
-    
-    public void gyroTurn()
-    {
-        double raw = hiTechnicNxtGyroSensor.readRawVoltage();
-            double bias = hiTechnicNxtGyroSensor.getBiasVoltage();
-            double current = System.nanoTime();
-            AngularVelocity velocity = hiTechnicNxtGyroSensor.getAngularVelocity(AngleUnit.DEGREES);
-            int adjVeloc = Math.abs(velocity.zRotationRate)<1? 0 : (int)velocity.zRotationRate;
-            if(frontLeft.getPower() ==0 && frontRight.getPower()==0 && backLeft.getPower() ==0 && backRight.getPower()==0)
-            {
-                adjVeloc =0;
-            }
-            degrees+= ((velocity.acquisitionTime-current) * velocity.zRotationRate/1000000000);
-            telemetry.addData("rate", "%.4f deg/s",      adjVeloc);
-            telemetry.addData("deg", "%.4f deg",  degrees * 180);
-            if((Math.abs(degrees*180))>89 && (Math.abs(degrees*180))<91)
-            {
-             telemetry.addData("IN THE IF", degrees*180);
-            }
-            telemetry.update();
+
+    public void gyroTurn() {
+        double          raw      = hiTechnicNxtGyroSensor.readRawVoltage();
+        double          bias     = hiTechnicNxtGyroSensor.getBiasVoltage();
+        double          current  = System.nanoTime();
+        AngularVelocity velocity = hiTechnicNxtGyroSensor.getAngularVelocity(AngleUnit.DEGREES);
+        int adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity
+                .zRotationRate;
+        if (frontLeft.getPower() == 0 && frontRight.getPower() == 0 && backLeft.getPower() == 0
+                && backRight.getPower() == 0) {
+            adjVeloc = 0;
+        }
+        degrees += ((velocity.acquisitionTime - current) * velocity.zRotationRate / 1000000000);
+        telemetry.addData("rate", "%.4f deg/s", adjVeloc);
+        telemetry.addData("deg", "%.4f deg", degrees * 180);
+        if ((Math.abs(degrees * 180)) > 89 && (Math.abs(degrees * 180)) < 91) {
+            telemetry.addData("IN THE IF", degrees * 180);
+        }
+        telemetry.update();
     }
 
     // Method to supply a given power to a provided list of motors
@@ -336,7 +329,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
             for (DcMotor motor : motors)
                 motor.setPower(power);
     }
-    
+
     // Halt provided list of motors
     public void stopMotors(DcMotor... motors) {
         powerMotors(0, motors);
@@ -354,9 +347,9 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public void resetEncoders() {
         if (opModeIsActive())
             for (DcMotor motor : wheels) {
-            motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
+                motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
 
     }
 
@@ -381,17 +374,17 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public void changeServoPos(Servo servo, double d) {
         servo.setPosition(MathUtils.constrainServo(servo.getPosition() + d));
     }
-    
+
     // Toggle driving with normal continuous power instead of using encoders
     public void powerDrive() {
         for (DcMotor motor : wheels)
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
-    
+
     // Toggle using encoders instead of driving with power
     // Synonymous with resetting the encoders
     public void encoderDrive() {
         resetEncoders();
-    } 
+    }
 
 }
