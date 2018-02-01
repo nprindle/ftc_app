@@ -15,10 +15,8 @@ public class NewAuto extends AutonomousTemplate {
 
     @Override
     public void auto() {
-        // Allows relic finder to run in the background 
-        // Could also use a single thread pool
+        // Begins running the relic finder in the background 
         ExecutorService executor = Executors.newCachedThreadPool();
-        // Submit relic finder to begin execution in the thread pool
         // Future will contain the value if it is found by the time it is needed
         Future<RelicRecoveryVuMark> finder = executor.submit(vuMarkFinder);
 
@@ -37,7 +35,7 @@ public class NewAuto extends AutonomousTemplate {
         delay();
         // Labeled block to delimit subtask
         // Also allows for named block collapsing in OnBot
-colorBall:
+        colorBall:
         {
             phase.setValue("Color Ball");
             telemetry.update();
@@ -82,9 +80,9 @@ colorBall:
                     // notify driver that no color can be successfully identified,
                     // possibly signaling an error with the color sensor
                     ballColor.setValue(String.format("unknown %d %d %d",
-                                colorSensor.red(),
-                                colorSensor.blue(),
-                                colorSensor.green()));
+                            colorSensor.red(),
+                            colorSensor.blue(),
+                            colorSensor.green()));
                     telemetry.update();
                 }
             }
@@ -96,7 +94,7 @@ colorBall:
         telemetry.clear();
         delay();
         RelicRecoveryVuMark mark;
-searchVuMark:
+        searchVuMark:
         {
             phase.setValue("Search VuMark");
             telemetry.update();
@@ -127,7 +125,7 @@ searchVuMark:
         }
 
         delay();
-placeBlock:
+        placeBlock:
         {
             phase.setValue("Place Block");
             telemetry.update();
