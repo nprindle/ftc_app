@@ -27,6 +27,9 @@ import org.firstinspires.ftc.teamcode.RobotUtils;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 
 // This class is extended by all autonomous subprograms run by the team
@@ -116,6 +119,11 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
                 }
             };
 
+    // Begins running the relic finder in the background
+    ExecutorService executor = Executors.newCachedThreadPool();
+    // Future will contain the value if it is found by the time it is needed
+    Future<RelicRecoveryVuMark> finder;
+
     @Override
     public void runOpMode() {
         // Allows Telemetry.Item-style telemetry to work
@@ -183,6 +191,8 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         trackables.addAll(relicTrackers);
         relicTemplate = relicTrackers.get(0);
         relicTemplate.setName("relicTemplate");
+
+        finder = executor.submit(vuMarkFinder);
 
         // Wait for "play" button to be pressed
         waitForStart();
@@ -316,7 +326,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         powerMotors(power * -direction, frontRight, backRight);
         double          current  = System.nanoTime();
         AngularVelocity velocity = hiTechnicNxtGyroSensor.getAngularVelocity(AngleUnit.DEGREES);
-        int             adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity
+        int adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity
                 .zRotationRate;
         if (frontLeft.getPower() == 0 && frontRight.getPower() == 0 && backLeft.getPower() == 0
                 && backRight.getPower() == 0) {

@@ -6,9 +6,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Autonomous(name = "Auto Red Far", group = "Autonomous")
 public class AutoRedFar extends AutonomousTemplate {
@@ -16,9 +13,9 @@ public class AutoRedFar extends AutonomousTemplate {
     @Override
     public void auto() {
         // Begins running the relic finder in the background
-        ExecutorService executor = Executors.newCachedThreadPool();
+        // ExecutorService executor = Executors.newCachedThreadPool();
         // Future will contain the value if it is found by the time it is needed
-        Future<RelicRecoveryVuMark> finder = executor.submit(vuMarkFinder);
+        // Future<RelicRecoveryVuMark> finder = executor.submit(vuMarkFinder);
         Telemetry.Item phase = telemetry.addData("Phase:", "")
                                         .setRetained(true);
         Telemetry.Item markItem = telemetry.addData("VuMark", "")
@@ -93,15 +90,15 @@ public class AutoRedFar extends AutonomousTemplate {
 
         firstFlip.setTargetPosition(-1194);
         firstFlip.setPower(0.5);
-        while(firstFlip.isBusy() && !isStopRequested());
+        while (firstFlip.isBusy() && !isStopRequested()) ;
         firstFlip.setPower(0.0);
-        
+
         rightFly.setPower(1.0);
         leftFly.setPower(1.0);
         delay();
         rightFly.setPower(0.0);
         leftFly.setPower(0.0);
-        
+
         grabLeft.setPosition(1.0);
         grabRight.setPosition(1.0);
 
