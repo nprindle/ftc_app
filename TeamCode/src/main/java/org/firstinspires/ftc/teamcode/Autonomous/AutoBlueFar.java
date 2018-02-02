@@ -24,42 +24,35 @@ public class AutoBlueFar extends AutonomousTemplate {
         Telemetry.Item markItem = telemetry.addData("VuMark", "")
                                            .setRetained(true);
 
-        // ******* Color Ball *******
+        // ******************** Color Ball ********************
         phase.setValue("Color Ball");
         telemetry.update();
         encoderDrive();
-        // topLeft.setPower(0.5);
-        // bottomRight.setPower(0.5);
-        // delay();
-        // topLeft.setPower(0.0);
-        // bottomRight.setPower(0.0);
 
         // Lower color sensor to balls
         flicker.setPosition(0.0);
         delay();
-        // Turn on color sensor's light
         colorSensor.enableLed(true);
-        // Additional field added to show ball that was found
         while (!isStopRequested()) {
             if (colorSensor.red() > colorSensor.blue()) {
                 drive(2, IN, 0.3);
                 idle();
                 flicker.setPosition(0.4);
-                drive(-45, IN, 0.5);
+                drive(-37, IN, 0.5);
                 break;
             } else if (colorSensor.blue() > colorSensor.red()) {
                 drive(-2, IN, 0.3);
                 idle();
                 flicker.setPosition(0.4);
-                drive(-41, IN, 0.3);
+                drive(-33, IN, 0.5);
                 break;
             }
         }
         telemetry.update();
-        // deactivate color sensor
+        // Deactivate color sensor
         colorSensor.enableLed(false);
 
-        // ******* Search VuMark *******
+        // ******************** Search VuMark ********************
         RelicRecoveryVuMark mark;
         if (finder.isDone()) {
             try {
@@ -77,9 +70,9 @@ public class AutoBlueFar extends AutonomousTemplate {
         markItem.setValue(vuMarkToString(mark));
         telemetry.update();
 
-        // ******* Strafe to cryptogram *******
+        // ******************** Strafe to cryptogram ********************
         phase.setValue("Strafe to cryptogram");
-        // default strafe distance; VM_LEFT or VM_UNKNOWN
+        // default strafe distance; corresponds to VM_LEFT or VM_UNKNOWN
         double strafeDistance = 0.0;
         if (mark.equals(VM_CENTER)) {
             strafeDistance = 7.5;
@@ -88,20 +81,24 @@ public class AutoBlueFar extends AutonomousTemplate {
         }
         strafe(strafeDistance, IN, 180, 0.4);
 
-        // ******* Insert block in cryptogram *******
+        // ******************** Insert block in cryptogram ********************
         phase.setValue("Insert block");
         grabLeft.setPosition(1.0);
         grabRight.setPosition(1.0);
 
-        firstFlip.setPower(-0.3);
-        delay(1.0);
+        firstFlip.setTargetPosition(-1194);
+        firstFlip.setPower(0.5);
+        while(firstFlip.isBusy() && !isStopRequested()) {
+            telemetry.clear();
+            telemetry.addLine("First flip running");
+        }
         firstFlip.setPower(0.0);
+        delay();
         secondFlip.setPosition(1.0);
-
-        delay(1.0);
+        delay();
         secondFlip.setPosition(0.0);
 
-        // Wait until end of autonomous or until the player requests a stop
+        // Wait until end of autonomous, or until the player requests a stop
         phase.setValue("Waiting for stop");
         stopMotors(wheels);
         resetEncoders();

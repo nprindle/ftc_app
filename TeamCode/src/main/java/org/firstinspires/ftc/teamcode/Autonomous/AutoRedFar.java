@@ -24,7 +24,7 @@ public class AutoRedFar extends AutonomousTemplate {
         Telemetry.Item markItem = telemetry.addData("VuMark", "")
                                            .setRetained(true);
 
-        // ******* Color Ball *******
+        // ******************** Color Ball ********************
         phase.setValue("Color Ball");
         telemetry.update();
         encoderDrive();
@@ -59,7 +59,7 @@ public class AutoRedFar extends AutonomousTemplate {
         // deactivate color sensor
         colorSensor.enableLed(false);
 
-        // ******* Search VuMark *******
+        // ******************** Search VuMark ********************
         RelicRecoveryVuMark mark;
         if (finder.isDone()) {
             try {
@@ -77,7 +77,7 @@ public class AutoRedFar extends AutonomousTemplate {
         markItem.setValue(vuMarkToString(mark));
         telemetry.update();
 
-        // ******* Strafe to cryptogram *******
+        // ******************** Strafe to cryptogram ********************
         phase.setValue("Strafe to cryptogram");
         // default strafe distance; VM_LEFT or VM_UNKNOWN
         double strafeDistance = 0.0;
@@ -88,14 +88,17 @@ public class AutoRedFar extends AutonomousTemplate {
         }
         strafe(strafeDistance, IN, 180, 0.4);
 
-        // ******* Insert block in cryptogram *******
+        // ******************** Insert block in cryptogram ********************
         phase.setValue("Insert block");
 
-        firstFlip.setTargetPosition(1);
+        firstFlip.setTargetPosition(-1194);
+        firstFlip.setPower(0.5);
+        while(firstFlip.isBusy() && !isStopRequested());
+        firstFlip.setPower(0.0);
         
         rightFly.setPower(1.0);
         leftFly.setPower(1.0);
-        delay(1.0);
+        delay();
         rightFly.setPower(0.0);
         leftFly.setPower(0.0);
         
@@ -105,7 +108,7 @@ public class AutoRedFar extends AutonomousTemplate {
         delay(1.0);
 
 
-        // Wait until end of autonomous or until the player requests a stop
+        // Wait until end of autonomous, or until the player requests a stop
         phase.setValue("Waiting for stop");
         stopMotors(wheels);
         resetEncoders();

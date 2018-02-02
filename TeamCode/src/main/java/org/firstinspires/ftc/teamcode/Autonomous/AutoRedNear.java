@@ -21,7 +21,7 @@ public class AutoRedNear extends AutonomousTemplate {
         Telemetry.Item              phase  = telemetry.addData("Phase:", "").setRetained(true);
 
 
-        // Wait until end of autonomous or until the player requests a stop
+        // Wait until end of autonomous, or until the player requests a stop
         phase.setValue("Waiting for stop");
         stopMotors(wheels);
         resetEncoders();
