@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import android.hardware.Sensor;
+import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
@@ -63,12 +67,14 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     DcMotor[] wheels;
 
     // Servos used to move the grabber forwards or backwards
-    CRServo topRight, topLeft, bottomRight, bottomLeft;
+    CRServo leftFly, rightFly;
 
     // The arms of the block grabber
     Servo grabLeft, grabRight, flicker, secondFlip;
 
     ColorSensor colorSensor;
+    
+    OpticalDistanceSensor distanceSensor;
 
     // Enumerations (usually bad practice, use enums instead)
     // Used to simplify the turn method
@@ -143,16 +149,20 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "default");
         backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "default");
         backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
-        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "default");
+        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "position");
 
         grabLeft = RobotUtils.registerServo(hardwareMap, "grabLeft", true, 0.549);
         grabRight = RobotUtils.registerServo(hardwareMap, "grabRight", false, 0.549);
 
         //flicker = RobotUtils.registerMotor(hardwareMap, "flicker", true, "default");
         flicker = RobotUtils.registerServo(hardwareMap, "flicker", false, 0.4);
-        secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", false, 0.0);
+        secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", true, 0.0);
 
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        distanceSensor = hardwareMap.opticalDistanceSensor.get("distance");
+        
+        leftFly = RobotUtils.registerCRServo(hardwareMap, "leftFly", true, 0.0);
+        rightFly = RobotUtils.registerCRServo(hardwareMap, "rightFly", false, 0.0);
 
         wheels = new DcMotor[]{frontLeft, frontRight, backLeft, backRight};
         // gyroscope = hardwareMap.get(Gyroscope.class, "gyro");
@@ -224,6 +234,7 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
     public void delay(double seconds) {
         sleep((long) (1000.0 * seconds));
     }
+    
 
     // Generic waiting, usually for a full hardware cycle
     public void delay() {
@@ -303,24 +314,27 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         }
     }
 
-    public void gyroTurn() {
-        double          raw      = hiTechnicNxtGyroSensor.readRawVoltage();
-        double          bias     = hiTechnicNxtGyroSensor.getBiasVoltage();
+    public void gyroTurn(double distance, int direction, double power) {
+        powerMotors(power * direction, frontLeft, backLeft);
+        powerMotors(power * -direction, frontRight, backRight);
         double          current  = System.nanoTime();
         AngularVelocity velocity = hiTechnicNxtGyroSensor.getAngularVelocity(AngleUnit.DEGREES);
-        int adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity
-                .zRotationRate;
-        if (frontLeft.getPower() == 0 && frontRight.getPower() == 0 && backLeft.getPower() == 0
-                && backRight.getPower() == 0) {
+        int adjVeloc = Math.abs(velocity.zRotationRate) < 1 ? 0 : (int) velocity.zRotationRate;
+        if (frontLeft.getPower() == 0 && frontRight.getPower() == 0 && backLeft.getPower() == 0 && backRight.getPower() == 0) {
             adjVeloc = 0;
         }
         degrees += ((velocity.acquisitionTime - current) * velocity.zRotationRate / 1000000000);
-        telemetry.addData("rate", "%.4f deg/s", adjVeloc);
-        telemetry.addData("deg", "%.4f deg", degrees * 180);
-        if ((Math.abs(degrees * 180)) > 89 && (Math.abs(degrees * 180)) < 91) {
-            telemetry.addData("IN THE IF", degrees * 180);
+        if ((Math.abs(degrees * 180)) > distance - 1 && (Math.abs(degrees * 180)) < distance + 1) {
+            stopMotors(frontLeft,backLeft,frontRight,backRight);
         }
-        telemetry.update();
+    }
+    public void columnStrafe(double power, int direction)   {
+        power *= direction;
+        while((Math.sqrt(1/distanceSensor.getLightDetected()))>3) { 
+            powerMotors(power, frontRight, backLeft);
+            powerMotors(-power, frontLeft, backRight);
+        }
+        stopMotors(frontRight, backRight, frontLeft, backLeft);
     }
 
     // Method to supply a given power to a provided list of motors

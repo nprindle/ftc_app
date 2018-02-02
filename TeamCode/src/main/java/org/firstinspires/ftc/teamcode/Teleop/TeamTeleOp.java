@@ -52,25 +52,25 @@ public class TeamTeleOp extends OpMode {
                 right_x_2 = gamepad2.right_stick_x,
                 right_y_2 = -gamepad2.right_stick_y;
 
-        if (gamepad2.x) {
-            switchControls = true;
-        } else if (gamepad2.y) {
-            switchControls = false;
-        }
+        // if (gamepad2.x) {
+        //     switchControls = true;
+        // } else if (gamepad2.y) {
+        //     switchControls = false;
+        // }
 
-        // x-controls control the extender
-        if (switchControls) {
-            extender.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
-            if (gamepad2.a) {
-                grabber.setPosition(0.0);
-            } else if (gamepad2.b) {
-                grabber.setPosition(0.3);
-            }
-            if (Math.abs(left_y) > 0.1) {
-                relicPos = MathUtils.constrainServo(relicPos + (0.05 * left_y));
-                relicFlip.setPosition(relicPos);
-            }
-        } else {
+        // // x-controls control the extender
+        // if (switchControls) {
+        //     extender.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
+        //     if (gamepad2.a) {
+        //         grabber.setPosition(0.0);
+        //     } else if (gamepad2.b) {
+        //         grabber.setPosition(0.3);
+        //     }
+        //     if (Math.abs(left_y) > 0.1) {
+        //         relicPos = MathUtils.constrainServo(relicPos + (0.05 * left_y));
+        //         relicFlip.setPosition(relicPos);
+        //     }
+        // } else {
             // y-controls control fly wheels, grabbers,
             if (gamepad2.left_trigger > 0.1) {
                 leftFly.setPower(1.0);
@@ -97,9 +97,11 @@ public class TeamTeleOp extends OpMode {
             }
 
             if (Math.abs(left_y_2) > 0.1) {
-                firstFlip.setPower(left_y_2);
+                firstFlip.setPower(left_y_2*0.5);
+                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
             } else {
                 firstFlip.setPower(0);
+                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
             }
 
             if (Math.abs(right_y_2) > 0.1) {
@@ -112,21 +114,21 @@ public class TeamTeleOp extends OpMode {
                 secondFlip.setPosition(secondFlipPos);
             }
 
-            telemetry.addData("grabLeftPos", grabLeftPos);
-            telemetry.addData("grabRightPos", grabRightPos);
-        }
+            telemetry.addData("grabLeftPos: ", grabLeftPos);
+            telemetry.addData("grabRightPos: ", grabRightPos);
+        
 
         // Left trigger will halve the speed
         // Right trigger will double the speed
         // Right bumper will slowly accelerate
-        if (gamepad1.left_trigger > 0.1) {
+        if(gamepad1.left_trigger > 0.1) {
             scale = 0.25;
-        } else if (gamepad1.right_trigger > 0.1) {
+        } else if(gamepad1.right_trigger > 0.1) {
             scale = 1.0;
-        } else if (gamepad1.right_bumper) {
-            if (gamepad1.x)
+        } else if(gamepad1.right_bumper) {
+            if(gamepad1.x)
                 scale = 0;
-            else if (scale < Math.hypot(left_x, left_y))
+            else if(scale < Math.hypot(left_x, left_y))
                 scale += 0.05;
         } else {
             scale = 0.5;
@@ -139,10 +141,7 @@ public class TeamTeleOp extends OpMode {
         backLeft.setPower(vs[2] * scale);
         backRight.setPower(vs[3] * scale);
 
-        telemetry.addData("Second Flip Pos in loop", secondFlip.getPosition());
-
-        //flicker.setPosition(flickerPos);
-        telemetry.addData("Flicker Pos in the loop", flicker.getPosition());
+        
 
         //LOOK AT THIS FOR VIKAS REQUEST
         // if(gamepad2.x)
@@ -166,6 +165,8 @@ public class TeamTeleOp extends OpMode {
         telemetry.addLine(String.format("%+.02f", frontRight.getPower()));
         telemetry.addLine(String.format("%+.02f", backLeft.getPower()));
         telemetry.addLine(String.format("%+.02f", backRight.getPower()));
+        telemetry.addData("Second Flip Pos in loop", secondFlip.getPosition());
+        telemetry.addData("Flicker Pos in the loop", flicker.getPosition());
         telemetry.update();
     }
 
@@ -182,7 +183,7 @@ public class TeamTeleOp extends OpMode {
         frontRight = RobotUtils.registerMotor(hardwareMap, "right", false, "default");
         backLeft = RobotUtils.registerMotor(hardwareMap, "backLeft", true, "default");
         backRight = RobotUtils.registerMotor(hardwareMap, "backRight", false, "default");
-        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", false, "default");
+        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", true, "encoder");
         extender = RobotUtils.registerMotor(hardwareMap, "extender", false, "default");
 
         //lift = RobotUtils.registerMotor(hardwareMap, "lift", true, "default");
@@ -198,7 +199,7 @@ public class TeamTeleOp extends OpMode {
 
         //flicker = RobotUtils.registerMotor(hardwareMap, "flicker", true, "default");
         flicker = RobotUtils.registerServo(hardwareMap, "flicker", false, flickerPos);
-        secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", false, secondFlipPos);
+        secondFlip = RobotUtils.registerServo(hardwareMap, "secondFlip", true, secondFlipPos);
 
         telemetry.addData("Status", "Initialization complete");
         telemetry.addData("Flicker Pos", flicker.getPosition());

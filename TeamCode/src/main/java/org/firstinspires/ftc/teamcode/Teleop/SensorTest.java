@@ -1,16 +1,22 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
 import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gyroscope;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
+import org.firstinspires.ftc.teamcode.MathUtils;
+import org.firstinspires.ftc.teamcode.RobotUtils;
+
 
 @TeleOp(name = "GyroSensor", group = "TeleOp")
 
 public class SensorTest extends OpMode {
+    
+    private DcMotor firstFlip;
     Gyroscope              gyroscope;
     HiTechnicNxtGyroSensor hiTechnicNxtGyroSensor;
     double   degrees  = 0.0;
@@ -23,6 +29,7 @@ public class SensorTest extends OpMode {
 
     @Override
     public void init_loop() {
+        firstFlip = RobotUtils.registerMotor(hardwareMap, "firstFlip", true, "encoder");
     }
 
     // simply ensures motors are stopped when start is pressed
@@ -40,7 +47,14 @@ public class SensorTest extends OpMode {
     }
 
     public void loop() {
-
+       float left_y_2 = -gamepad2.left_stick_y;
+        if (Math.abs(left_y_2) > 0.1) {
+                firstFlip.setPower(left_y_2*0.5);
+                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
+            } else {
+                firstFlip.setPower(0);
+                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
+            }
     }
 
     public void isTurning() {
@@ -81,5 +95,6 @@ public class SensorTest extends OpMode {
         }
         return (average);
     }
+    
 
 }

@@ -28,14 +28,14 @@ public class AutoBlueFar extends AutonomousTemplate {
         phase.setValue("Color Ball");
         telemetry.update();
         encoderDrive();
-        topLeft.setPower(0.5);
-        bottomRight.setPower(0.5);
-        delay();
-        topLeft.setPower(0.0);
-        bottomRight.setPower(0.0);
+        // topLeft.setPower(0.5);
+        // bottomRight.setPower(0.5);
+        // delay();
+        // topLeft.setPower(0.0);
+        // bottomRight.setPower(0.0);
 
         // Lower color sensor to balls
-        flicker.setPosition(0.8);
+        flicker.setPosition(0.0);
         delay();
         // Turn on color sensor's light
         colorSensor.enableLed(true);
