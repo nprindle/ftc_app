@@ -38,13 +38,13 @@ public class AutoBlueFar extends AutonomousTemplate {
                 drive(2, IN, 0.3);
                 idle();
                 flicker.setPosition(0.4);
-                drive(-37, IN, 0.5);
+                drive(-34, IN, 0.5);
                 break;
             } else if (colorSensor.blue() > colorSensor.red()) {
                 drive(-2, IN, 0.3);
                 idle();
                 flicker.setPosition(0.4);
-                drive(-33, IN, 0.5);
+                drive(-30, IN, 0.5);
                 break;
             }
         }
