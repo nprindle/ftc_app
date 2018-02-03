@@ -51,9 +51,14 @@ public class RobotUtils {
     public static Servo registerServo(HardwareMap map, String name,
                                       boolean reversed) {
         Servo servo = map.servo.get(name);
-        if (reversed)
+        if (reversed) {
+            // if only the reversed servo happens to move during
+            // initialization, try uncommenting the following lines
+
+            // double pos = servo.getPosition();
             servo.setDirection(Servo.Direction.REVERSE);
-        else
+            // servo.setPosition(1.0 - pos);
+        } else
             servo.setDirection(Servo.Direction.FORWARD);
         return servo;
     }
