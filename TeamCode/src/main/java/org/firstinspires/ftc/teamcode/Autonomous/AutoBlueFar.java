@@ -6,9 +6,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 @Autonomous(name = "Auto Blue Far", group = "Autonomous")
 public class AutoBlueFar extends AutonomousTemplate {
@@ -84,7 +81,7 @@ public class AutoBlueFar extends AutonomousTemplate {
 
         firstFlip.setTargetPosition(-1194);
         firstFlip.setPower(0.5);
-        while(firstFlip.isBusy() && !isStopRequested()) {
+        while (firstFlip.isBusy() && !isStopRequested()) {
             telemetry.clear();
             telemetry.addLine("First flip running");
         }

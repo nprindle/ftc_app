@@ -36,7 +36,7 @@ public class TeamTeleOp extends OpMode {
     private double scale       = 0;
     // Used to track the position of the block grabbing arms
     private double grabLeftPos = 0.549, grabRightPos = 0.549, secondFlipPos = 0.0, flickerPos =
-            0.4, relicPos = 0.0;
+            0.4, relicPos      = 0.0;
     boolean switchControls = false;
 
     @Override
@@ -71,64 +71,64 @@ public class TeamTeleOp extends OpMode {
         //         relicFlip.setPosition(relicPos);
         //     }
         // } else {
-            // y-controls control fly wheels, grabbers,
-            if (gamepad2.left_trigger > 0.1) {
-                leftFly.setPower(1.0);
-                rightFly.setPower(1.0);
-            } else if (gamepad2.right_trigger > 0.1) {
-                leftFly.setPower(-1.0);
-                rightFly.setPower(-1.0);
-            } else {
-                leftFly.setPower(0.0);
-                rightFly.setPower(0.0);
+        // y-controls control fly wheels, grabbers,
+        if (gamepad2.left_trigger > 0.1) {
+            leftFly.setPower(1.0);
+            rightFly.setPower(1.0);
+        } else if (gamepad2.right_trigger > 0.1) {
+            leftFly.setPower(-1.0);
+            rightFly.setPower(-1.0);
+        } else {
+            leftFly.setPower(0.0);
+            rightFly.setPower(0.0);
+        }
+
+        // 'a' and 'b' of gamepad 2 open and close the block grabbers
+        if (gamepad2.a) {
+            grabLeftPos = MathUtils.constrainServo(grabLeftPos - 0.01);
+            grabRightPos = MathUtils.constrainServo(grabRightPos - 0.01);
+            grabLeft.setPosition(grabLeftPos);
+            grabRight.setPosition(grabRightPos);
+        } else if (gamepad2.b) {
+            grabLeftPos = MathUtils.constrainServo(grabLeftPos + 0.01);
+            grabRightPos = MathUtils.constrainServo(grabRightPos + 0.01);
+            grabLeft.setPosition(grabLeftPos);
+            grabRight.setPosition(grabRightPos);
+        }
+
+        if (Math.abs(left_y_2) > 0.1) {
+            firstFlip.setPower(left_y_2 * 0.5);
+            telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
+        } else {
+            firstFlip.setPower(0);
+            telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
+        }
+
+        if (Math.abs(right_y_2) > 0.1) {
+            if (right_y_2 < 0) {
+                secondFlipPos = MathUtils.constrainServo(secondFlipPos - 0.05);
+            } else if (right_y_2 > 0) {
+                secondFlipPos = MathUtils.constrainServo(secondFlipPos + 0.05);
             }
 
-            // 'a' and 'b' of gamepad 2 open and close the block grabbers
-            if (gamepad2.a) {
-                grabLeftPos = MathUtils.constrainServo(grabLeftPos - 0.01);
-                grabRightPos = MathUtils.constrainServo(grabRightPos - 0.01);
-                grabLeft.setPosition(grabLeftPos);
-                grabRight.setPosition(grabRightPos);
-            } else if (gamepad2.b) {
-                grabLeftPos = MathUtils.constrainServo(grabLeftPos + 0.01);
-                grabRightPos = MathUtils.constrainServo(grabRightPos + 0.01);
-                grabLeft.setPosition(grabLeftPos);
-                grabRight.setPosition(grabRightPos);
-            }
+            secondFlip.setPosition(secondFlipPos);
+        }
 
-            if (Math.abs(left_y_2) > 0.1) {
-                firstFlip.setPower(left_y_2*0.5);
-                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
-            } else {
-                firstFlip.setPower(0);
-                telemetry.addData("encoder position for first flip", firstFlip.getCurrentPosition());
-            }
+        telemetry.addData("grabLeftPos: ", grabLeftPos);
+        telemetry.addData("grabRightPos: ", grabRightPos);
 
-            if (Math.abs(right_y_2) > 0.1) {
-                if (right_y_2 < 0) {
-                    secondFlipPos = MathUtils.constrainServo(secondFlipPos - 0.05);
-                } else if (right_y_2 > 0) {
-                    secondFlipPos = MathUtils.constrainServo(secondFlipPos + 0.05);
-                }
-
-                secondFlip.setPosition(secondFlipPos);
-            }
-
-            telemetry.addData("grabLeftPos: ", grabLeftPos);
-            telemetry.addData("grabRightPos: ", grabRightPos);
-        
 
         // Left trigger will halve the speed
         // Right trigger will double the speed
         // Right bumper will slowly accelerate
-        if(gamepad1.left_trigger > 0.1) {
+        if (gamepad1.left_trigger > 0.1) {
             scale = 0.25;
-        } else if(gamepad1.right_trigger > 0.1) {
+        } else if (gamepad1.right_trigger > 0.1) {
             scale = 1.0;
-        } else if(gamepad1.right_bumper) {
-            if(gamepad1.x)
+        } else if (gamepad1.right_bumper) {
+            if (gamepad1.x)
                 scale = 0;
-            else if(scale < Math.hypot(left_x, left_y))
+            else if (scale < Math.hypot(left_x, left_y))
                 scale += 0.05;
         } else {
             scale = 0.5;
@@ -141,7 +141,6 @@ public class TeamTeleOp extends OpMode {
         backLeft.setPower(vs[2] * scale);
         backRight.setPower(vs[3] * scale);
 
-        
 
         //LOOK AT THIS FOR VIKAS REQUEST
         // if(gamepad2.x)

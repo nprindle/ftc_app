@@ -1,21 +1,13 @@
 package org.firstinspires.ftc.teamcode.Teleop;
 
-import com.qualcomm.hardware.hitechnic.HiTechnicNxtGyroSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.Gyroscope;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
-import org.firstinspires.ftc.teamcode.MathUtils;
-import org.firstinspires.ftc.teamcode.RobotUtils;
 
 
 @TeleOp(name = "GyroSensor", group = "TeleOp")
 
 public class SensorTest extends OpMode {
-    
+
     // Gyroscope              gyroscope;
     // HiTechnicNxtGyroSensor hiTechnicNxtGyroSensor;
     // double   degrees  = 0.0;
@@ -28,7 +20,7 @@ public class SensorTest extends OpMode {
 
     @Override
     public void init_loop() {
-        
+
     }
 
     // simply ensures motors are stopped when start is pressed
@@ -86,6 +78,6 @@ public class SensorTest extends OpMode {
     //     }
     //     return (average);
     // }
-    
+
 
 }

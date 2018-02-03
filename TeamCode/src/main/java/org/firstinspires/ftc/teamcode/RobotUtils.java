@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.content.Context;
 import android.hardware.SensorManager;
+
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -58,8 +59,9 @@ public class RobotUtils {
             // double pos = servo.getPosition();
             servo.setDirection(Servo.Direction.REVERSE);
             // servo.setPosition(1.0 - pos);
-        } else
+        } else {
             servo.setDirection(Servo.Direction.FORWARD);
+        }
         return servo;
     }
 
@@ -68,10 +70,7 @@ public class RobotUtils {
     public static Servo registerServo(HardwareMap map, String name,
                                       boolean reversed, double defaultPos) {
         Servo servo = map.servo.get(name);
-        if (reversed)
-            servo.setDirection(Servo.Direction.REVERSE);
-        else
-            servo.setDirection(Servo.Direction.FORWARD);
+        servo.setDirection(reversed ? Servo.Direction.REVERSE : Servo.Direction.FORWARD);
         servo.setPosition(defaultPos);
         return servo;
     }
@@ -104,11 +103,11 @@ public class RobotUtils {
     public static String getVuforiaLicenseKey() {
         return vuforiaLicenseKey;
     }
-    
+
     // Method to retrieve the sensor manager from the app context for use in
     // utilizing the built-in sensors in the phone
     public static SensorManager getSensorManager(HardwareMap map) {
         return (SensorManager)
-            map.appContext.getSystemService(Context.SENSOR_SERVICE);
+                map.appContext.getSystemService(Context.SENSOR_SERVICE);
     }
 }
