@@ -177,27 +177,25 @@ abstract class AutonomousTemplate extends LinearOpMode implements SensorEventLis
         telemetry.update();
 
         // Relic tracking initialization
-        int cameraMonitorViewId = hardwareMap.appContext.getResources()
-                                                        .getIdentifier("cameraMonitorViewId",
-                                                                "id", hardwareMap.appContext
-                                                                        .getPackageName());
-        VuforiaLocalizer.Parameters parameters =
-                new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier
+                ("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters
+                (cameraMonitorViewId);
         parameters.vuforiaLicenseKey = RobotUtils.getVuforiaLicenseKey();
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackers =
-                this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackables relicTrackers = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         trackables = new ArrayList<>();
         trackables.addAll(relicTrackers);
         relicTemplate = relicTrackers.get(0);
         relicTemplate.setName("relicTemplate");
 
+        // Start camera for relic identification
+        relicTrackers.activate();
+        // Begin execution of VuMark finder thread
         finder = executor.submit(vuMarkFinder);
 
         // Wait for "play" button to be pressed
         waitForStart();
-        // Start camera for relic identification
-        relicTrackers.activate();
 
         // Set total time to 0
         runtime.reset();
