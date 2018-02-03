@@ -12,10 +12,8 @@ public class AutoBlueFar extends AutonomousTemplate {
 
     @Override
     public void auto() {
-        Telemetry.Item phase = telemetry.addData("Phase:", "")
-                                        .setRetained(true);
-        Telemetry.Item markItem = telemetry.addData("VuMark", "")
-                                           .setRetained(true);
+        Telemetry.Item phase = telemetry.addData("Phase:", "") .setRetained(true);
+        Telemetry.Item markItem = telemetry.addData("VuMark", "") .setRetained(true);
 
         // ******************** Color Ball ********************
         phase.setValue("Color Ball");

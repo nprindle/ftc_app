@@ -16,10 +16,8 @@ public class AutoRedFar extends AutonomousTemplate {
         // ExecutorService executor = Executors.newCachedThreadPool();
         // Future will contain the value if it is found by the time it is needed
         // Future<RelicRecoveryVuMark> finder = executor.submit(vuMarkFinder);
-        Telemetry.Item phase = telemetry.addData("Phase:", "")
-                                        .setRetained(true);
-        Telemetry.Item markItem = telemetry.addData("VuMark", "")
-                                           .setRetained(true);
+        Telemetry.Item phase = telemetry.addData("Phase:", "") .setRetained(true);
+        Telemetry.Item markItem = telemetry.addData("VuMark", "") .setRetained(true);
 
         // ******************** Color Ball ********************
         phase.setValue("Color Ball");

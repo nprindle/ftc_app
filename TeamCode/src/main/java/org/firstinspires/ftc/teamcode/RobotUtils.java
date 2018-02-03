@@ -5,6 +5,7 @@ import android.hardware.SensorManager;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -19,13 +20,10 @@ public class RobotUtils {
                     "fc0M+KVoMTgBGeSu9HH31QBjo5narwZB5kg+BJhPv2ToNzcFjNhOrRYdpolK5I/nprvQIB2fNyDM";
 
     // Helper method to register a motor with the hardware map
-    public static DcMotor registerMotor(HardwareMap map, String name,
-                                        boolean reversed, String runmode) {
+    public static DcMotor registerMotor(HardwareMap map, String name, boolean reversed, String
+            runmode) {
         DcMotor motor = map.dcMotor.get(name);
-        if (reversed)
-            motor.setDirection(DcMotor.Direction.REVERSE);
-        else
-            motor.setDirection(DcMotor.Direction.FORWARD);
+        motor.setDirection(reversed ? DcMotor.Direction.REVERSE : DcMotor.Direction.FORWARD);
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         switch (runmode.toLowerCase()) {
             case "position":
@@ -43,14 +41,12 @@ public class RobotUtils {
 
     // More specific helper method to register motor without
     // worrying about the default RunMode
-    public static DcMotor registerMotor(HardwareMap map, String name,
-                                        boolean reversed) {
+    public static DcMotor registerMotor(HardwareMap map, String name, boolean reversed) {
         return registerMotor(map, name, reversed, "default");
     }
 
     // Helper method to register a servo with the hardware map
-    public static Servo registerServo(HardwareMap map, String name,
-                                      boolean reversed) {
+    public static Servo registerServo(HardwareMap map, String name, boolean reversed) {
         Servo servo = map.servo.get(name);
         if (reversed) {
             // if only the reversed servo happens to move during
@@ -67,8 +63,8 @@ public class RobotUtils {
 
     // Helper method to register a servo, including a
     // default position to move to during initialization
-    public static Servo registerServo(HardwareMap map, String name,
-                                      boolean reversed, double defaultPos) {
+    public static Servo registerServo(HardwareMap map, String name, boolean reversed, double
+            defaultPos) {
         Servo servo = map.servo.get(name);
         servo.setDirection(reversed ? Servo.Direction.REVERSE : Servo.Direction.FORWARD);
         servo.setPosition(defaultPos);
@@ -76,8 +72,8 @@ public class RobotUtils {
     }
 
     // Helper method to register a continuous rotation servo
-    public static CRServo registerCRServo(HardwareMap map, String name,
-                                          boolean reversed, double power) {
+    public static CRServo registerCRServo(HardwareMap map, String name, boolean reversed, double
+            power) {
         CRServo crServo = map.crservo.get(name);
         if (reversed)
             crServo.setDirection(CRServo.Direction.REVERSE);
@@ -89,8 +85,7 @@ public class RobotUtils {
 
     // Helper method to register a continuous rotation servo
     // without providing a default speed during initialization
-    public static CRServo registerCRServo(HardwareMap map, String name,
-                                          boolean reversed) {
+    public static CRServo registerCRServo(HardwareMap map, String name, boolean reversed) {
         CRServo crServo = map.crservo.get(name);
         if (reversed)
             crServo.setDirection(CRServo.Direction.REVERSE);
